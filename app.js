@@ -6,7 +6,7 @@ const cors = require("cors");
 
 const index = require("./routes/index");
 const user = require("./routes/user");
-const kakaoLogin = require("./routes/kakaoLogin");
+const login = require("./routes/login");
 
 const app = express();
 app.use(express.json());
@@ -40,7 +40,7 @@ db.on("open", function () {
 
 app.use("/", index);
 app.use("/user", user);
-app.use("/login/kakao", kakaoLogin);
+app.use("/login", login);
 
 app.listen(port, function () {
   console.log("Server Connected");
