@@ -15,13 +15,29 @@ exports.createUserForKakao = async function (req, res, next) {
     });
 
     const email = response.data.kakao_account.email;
-    const user = await User.findOne({ email });
+    const nickName = response.data.properties.nickname;
+    let user;
+
+    if (email) {
+      user = await User.findOne({ userId: email });
+    } else {
+      user = await User.findOne({ userId: nickName });
+    }
 
     if (user) {
+      if (email) {
+        return res.json({ result: "ok", data: email });
+      } else {
+        return res.json({ result: "ok", data: nickName });
+      }
+    }
+
+    if (email) {
+      await User.create({ userId: email });
       return res.json({ result: "ok", data: email });
     } else {
-      await User.create({ email });
-      return res.json({ result: "ok", data: email });
+      await User.create({ userId: nickName });
+      return res.json({ result: "ok", data: nickName });
     }
   } catch (err) {
     console.error("usercontroller createUserForKakao Error", err);
@@ -45,13 +61,12 @@ exports.createUserForGoogle = async function (req, res, next) {
 };
 
 exports.addDistance = async function (req, res, next) {
-  const { email, distance } = req.body;
-  const filter = { email: email };
-
+  const { userInfo, distance } = req.body;
+  const filter = { userId: userInfo };
   try {
-    const response = await User.findOne({ email });
+    const response = await User.findOne({ userInfo });
 
-    if (response.distance > distance) {
+    if (response.distance >= distance) {
       const update = { distance: response.distance };
       await User.findOneAndUpdate(filter, update, {
         new: true,
