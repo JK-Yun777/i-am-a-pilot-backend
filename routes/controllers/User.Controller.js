@@ -3,6 +3,7 @@ const User = require("../../models/User");
 
 exports.createUserForKakao = async function (req, res, next) {
   const token = req.body.token;
+  console.log("kakaoToken>>>>>", token);
   try {
     const url = "https://kapi.kakao.com/v2/user/me";
     const response = await axios({
@@ -46,9 +47,10 @@ exports.createUserForKakao = async function (req, res, next) {
 
 exports.createUserForGoogle = async function (req, res, next) {
   const email = req.body.email;
+  console.log("REQ email", email);
   try {
     const user = await User.findOne({ email });
-
+    console.log(">>>>>>>>>", user);
     if (user) {
       return res.json({ result: "ok", data: email });
     } else {
