@@ -15,6 +15,7 @@ app.use(express.urlencoded({ extended: false }));
 const whiteList = [
   process.env.FRONT_END_URL_ONE,
   process.env.FRONT_END_URL_TWO,
+  process.env.FRONT_END_URL_LOCAL,
 ];
 const corsOptions = {
   origin: function (origin, callback) {
@@ -27,19 +28,18 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 const port = app.listen(process.env.PORT || 8000);
-const URL = process.env.MONGO_DB_URL;
 
-mongoose.connect(URL);
-
-const db = mongoose.connection;
-
-db.on("error", function (err) {
-  console.log("mongodb Error", err);
-});
-
-db.on("open", function () {
-  console.log("DB Open");
-});
+mongoose.connect(
+  process.env.MONGO_DB_URL,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("MongoDB Connected");
+    }
+  },
+);
 
 app.use("/", index);
 app.use("/user", user);
