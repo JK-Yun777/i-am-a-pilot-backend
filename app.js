@@ -12,7 +12,10 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-const whiteList = ["http://localhost:3000"];
+const whiteList = [
+  process.env.FRONT_END_URL_ONE,
+  process.env.FRONT_END_URL_TWO,
+];
 const corsOptions = {
   origin: function (origin, callback) {
     if (whiteList.indexOf(origin) !== -1) {
