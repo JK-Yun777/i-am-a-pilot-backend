@@ -16,6 +16,7 @@ const whiteList = [
   process.env.FRONT_END_URL_ONE,
   process.env.FRONT_END_URL_TWO,
   process.env.FRONT_END_URL_API,
+  process.env.FRONT_END_URL_LOCAL,
 ];
 
 const corsOptions = {
