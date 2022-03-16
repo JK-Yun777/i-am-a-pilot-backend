@@ -4,7 +4,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-const index = require("./routes/index");
+// const index = require("./routes/index");
 const user = require("./routes/user");
 const login = require("./routes/login");
 
@@ -12,23 +12,24 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-const whiteList = [
-  process.env.FRONT_END_URL_ONE,
-  process.env.FRONT_END_URL_TWO,
-  process.env.FRONT_END_URL_API,
-  process.env.FRONT_END_URL_LOCAL,
-];
+// const whiteList = [
+//   process.env.FRONT_END_URL_ONE,
+//   process.env.FRONT_END_URL_TWO,
+//   process.env.FRONT_END_URL_API,
+//   process.env.FRONT_END_URL_LOCAL,
+// ];
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (whiteList.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not Allowed Origin"));
-    }
-  },
-};
-app.use(cors(corsOptions));
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     if (whiteList.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not Allowed Origin"));
+//     }
+//   },
+// };
+// app.use(cors(corsOptions));
+app.use(cors());
 
 const port = app.listen(process.env.PORT || 8000);
 
@@ -44,7 +45,7 @@ mongoose.connect(
   },
 );
 
-app.use("/", index);
+// app.use("/", index);
 app.use("/user", user);
 app.use("/login", login);
 
