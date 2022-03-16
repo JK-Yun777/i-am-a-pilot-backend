@@ -49,12 +49,12 @@ exports.createUserForGoogle = async function (req, res, next) {
   const email = req.body.email;
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ userId: email });
 
     if (user) {
       return res.json({ result: "ok", data: email });
     } else {
-      await User.create({ email });
+      await User.create({ userId: email });
       return res.json({ result: "ok", data: email });
     }
   } catch (err) {
@@ -64,23 +64,16 @@ exports.createUserForGoogle = async function (req, res, next) {
 
 exports.addDistance = async function (req, res, next) {
   const { userInfo, distance } = req.body;
-  const filter = { userId: userInfo };
 
   try {
-    const response = await User.findOne({ userInfo });
+    const response = await User.findOne({ userId: userInfo });
 
     if (response.distance >= distance) {
-      const update = { distance: response.distance };
-      await User.findOneAndUpdate(filter, update, {
-        new: true,
-      });
-      return res.json({ result: "ok" });
+      return res.json({ result: "ok", data: response.distance });
     } else {
-      const update = { distance: distance };
-      await User.findOneAndUpdate(filter, update, {
-        new: true,
-      });
-      return res.json({ result: "ok" });
+      response.distance = distance;
+      await response.save();
+      return res.json({ result: "ok", data: distance });
     }
   } catch (err) {
     console.error("usercontroller createUser Error", err);
