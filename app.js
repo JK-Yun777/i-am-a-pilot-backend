@@ -1,8 +1,9 @@
-require("dotenv").config();
 const createError = require("http-errors");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const user = require("./routes/user");
 const login = require("./routes/login");
@@ -32,6 +33,10 @@ app.use(cors(corsOptions));
 
 const port = app.listen(process.env.PORT || 8000);
 
+app.listen(port, function () {
+  console.log("Server Connected");
+});
+
 mongoose.connect(
   process.env.MONGO_DB_URL,
   { useNewUrlParser: true, useUnifiedTopology: true },
@@ -44,13 +49,8 @@ mongoose.connect(
   },
 );
 
-// app.use("/", index);
 app.use("/user", user);
 app.use("/login", login);
-
-app.listen(port, function () {
-  console.log("Server Connected");
-});
 
 app.use(function (req, res, next) {
   next(createError(404));

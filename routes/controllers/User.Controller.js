@@ -65,6 +65,7 @@ exports.createUserForGoogle = async function (req, res, next) {
 exports.addDistance = async function (req, res, next) {
   const { userInfo, distance } = req.body;
   const filter = { userId: userInfo };
+
   try {
     const response = await User.findOne({ userInfo });
 
